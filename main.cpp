@@ -6,6 +6,8 @@
 
 using namespace std;
 
+// this function considers the precedence for characters 
+//  when it is looking at the boolean expressions
 int precedence(const string & op)
 {
     switch(op[0])
@@ -24,6 +26,8 @@ int precedence(const string & op)
     }
 }
 
+// as the name suggests, it puts a string from infix position to a postfix position
+//      we use this function when putting the boolean expression into the stack
 string infix_to_postfix(const string & infix)
 {
     string token;
@@ -76,11 +80,13 @@ string infix_to_postfix(const string & infix)
     return ans;
 }
 
+// this function simply takes the AND of two variables
 bool and_them(bool a, bool b)
 {
     return a&&b;
 }
 
+// this functions inverts the boolean value
 bool invert(bool a)
 {
     if (a==1)
@@ -88,11 +94,14 @@ bool invert(bool a)
     return 1;
 }
 
+// this function takes the OR value of two variables
 bool or_them(bool a, bool b)
 {
     return a||b;
 }
 
+// this function prompts the user to type in a certain amount of variables
+//  and returns the list of variables in a vector
 vector<string> get_variables(vector<string> list_of_variables)
 {
     string variable;
@@ -109,6 +118,8 @@ vector<string> get_variables(vector<string> list_of_variables)
 
 }
 
+// this function prompts the user to put in any number of boolean expressions,
+//  which are stored and returned in a vector
 vector<string> get_expressions(vector<string> list_expressions)
 {
     string expression;
@@ -123,6 +134,7 @@ vector<string> get_expressions(vector<string> list_expressions)
     return list_expressions;
 }
 
+// this function produces 2^n (where n = size of list_of_variables) binary combinations 
 vector<vector<bool>> create_input_combos(vector<string> list, int list_size)
 {
     vector<vector<bool>> input_combos;
@@ -145,9 +157,7 @@ vector<vector<bool>> create_input_combos(vector<string> list, int list_size)
                 j = -1;
             }
             else
-            {
                 temp_combo[j] = 0;
-            }
         }
         combo=temp_combo;
         input_combos.push_back(combo);
@@ -155,17 +165,15 @@ vector<vector<bool>> create_input_combos(vector<string> list, int list_size)
     return input_combos;
 }
 
+// this function creates a boolean result by inputting the combos into the expressions
 void translate_logic(vector<string> list_expressions, vector<vector<bool>> input_combos)
 {
     pair<char,bool> cbpair;
-//    stack<bool> s;
-
     string ilyas="'Chris";
     char invert_symbol=ilyas[0];
 
     for (auto expression: list_expressions)
     {
-
         vector<char> expression_variables;
         cout<<"-----------------------------------"<<endl;
         cout<<expression<<endl;
@@ -178,7 +186,6 @@ void translate_logic(vector<string> list_expressions, vector<vector<bool>> input
                 expression_variables.push_back(expression[i]);
         }
 
-//        cout << expression << endl;
         sort(expression_variables.begin(), expression_variables.end());
 
         for (auto combo: input_combos)
@@ -193,9 +200,7 @@ void translate_logic(vector<string> list_expressions, vector<vector<bool>> input
                         if(character==expression_variables[i])
                         {
                              cbpair=make_pair(character,combo[i]);
-//                             cout<<"!"<<character<<", i="<<i<<endl;
                              s.push(cbpair.second);
-//                             cout<<"<"<<cbpair.first<<","<<cbpair.second<<">"<<endl;
                         }
                     }
                 }
@@ -209,8 +214,6 @@ void translate_logic(vector<string> list_expressions, vector<vector<bool>> input
                         s.pop();
                         bool new_value=or_them(value1,value2);
                         s.push(new_value);
-//                        cout<<value1<<character<<value2<<"="<<new_value<<endl;
-//                        cout<<s.size()<<endl;
                     }
 
                     else if (character=='*')
@@ -221,7 +224,6 @@ void translate_logic(vector<string> list_expressions, vector<vector<bool>> input
                         s.pop();
                         bool new_value=and_them(value1,value2);
                         s.push(new_value);
-//                        cout<<value1<<character<<value2<<"="<<new_value<<endl;
                     }
 
                     else if (character == invert_symbol)
@@ -242,6 +244,7 @@ void translate_logic(vector<string> list_expressions, vector<vector<bool>> input
     }
 }
 
+// prints 2^n combos
 void print_input_combos(vector<vector<bool>> input_combos)
 {
     for(auto e:input_combos)
@@ -252,6 +255,7 @@ void print_input_combos(vector<vector<bool>> input_combos)
     }
 }
 
+// prints all the variables
 void print_all_variables (vector<string> list,int list_size)
 {
     for (auto e:list)
